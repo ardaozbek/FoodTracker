@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template,g
+from flask import Flask, request, render_template, g, redirect, url_for
 from datetime import datetime as dt
 from database import connect_db, get_db
 
@@ -20,6 +20,8 @@ def index():
 
         db.execute('INSERT INTO log_date (entry_date) VALUES (?)', [database_date])
         db.commit()
+
+        return redirect(url_for('view', date=database_date))
 
     cur = db.execute('''
                     SELECT log_date.entry_date, SUM(food.protein) AS protein, SUM(food.carbohydrates) AS carbohydrates, 
